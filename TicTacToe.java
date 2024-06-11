@@ -9,8 +9,13 @@ public class TicTacToe extends JFrame {
         setTitle("Tic-Tac-Toe");
         setSize(810, 810);
         setLayout(new GridLayout(ROWS, COLUMNS));
-        
-        new JButton("hi");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JButton hi = new JButton("hi");
+        hi.setFont(new Font("Times New Roman", Font.PLAIN, 50));
+        JPanel panel1 = new JPanel();
+        panel1.add(hi);
+        add(panel1, BorderLayout.NORTH);
 
         setVisible(true);
     }
