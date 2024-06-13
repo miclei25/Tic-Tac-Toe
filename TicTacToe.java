@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class TicTacToe extends JFrame {
     int WINDOW_SIZE = 765;
@@ -9,6 +11,7 @@ public class TicTacToe extends JFrame {
     int BORDER_SIZE = 1;
     int TEXT_SIZE = 45;
     int BUTTON_DIMENSIONS = WINDOW_SIZE / ROWS;
+    // JButton[][] buttons = new JButton[ROWS][COLUMNS];
 
     public TicTacToe() {
         setTitle("Tic-Tac-Toe");
@@ -16,87 +19,70 @@ public class TicTacToe extends JFrame {
         setLayout(new GridLayout(ROWS, COLUMNS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Border border = new LineBorder(Color.BLACK, BORDER_SIZE);
+        Border border = new LineBorder(Color.BLACK, BORDER_SIZE);
 
-        for (int i = 0; i < (ROWS * COLUMNS); i++) {
-            JButton button = new JButton("x");
-            button.setFont(new Font("Times New Roman", Font.PLAIN, TEXT_SIZE));
-            // button.setBorder(border);
-
-            // drawRect(BUTTON_DIMENSIONS, BUTTON_DIMENSIONS, 5, 5);
-            
-            // if ((i / 9) % 3 == 0 && i != 0) {
-            //     button.setBorder(BorderFactory.createCompoundBorder(thickBorder, thinBorder));
-            // }
-            // if (i % 9 % 3 == 0 && i != 0) {
-            //     button.setBorder(BorderFactory.createCompoundBorder(thickBorder, thinBorder));
-            // }
-            
-            add(button);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    for (int l = 0; l < 3; l++) {
+                        JButton button = new JButton(String.valueOf(Main.bigBoard[i][k].board[j][l]));
+                        button.setFont(new Font("Times New Roman", Font.PLAIN, TEXT_SIZE));
+                        button.setBorder(border);
+                        button.addActionListener(new ButtonClickListener());
+                        // button.addActionListener(new ButtonClickListener2(i, k, j, l));
+                        // buttons[i * 3 + j][k * 3 + l] = button;
+                        add(button);
+                    }
+                }
+            }
         }
-
-        // setVisible(true);
-
-
-        // JPanel panel = new JPanel() {
-        //     @Override
-        //     protected void paintComponent(Graphics g) {
-        //         super.paintComponent(g);
-        //         drawGrid(g);
-        //     }
-
-        //     private void drawGrid(Graphics g) {
-        //         int rows = 9;
-        //         int cols = 9;
-        //         int width = getWidth();
-        //         int height = getHeight();
-        //         int cellWidth = width / cols;
-        //         int cellHeight = height / rows;
-
-        //         g.setColor(Color.BLACK);
-
-        //         // Draw vertical lines
-        //         for (int i = 0; i <= cols; i++) {
-        //             int x = i * cellWidth;
-        //             g.drawLine(x, 0, x, height);
-
-        //             if (i % 3 == 0) {
-        //                 g.drawLine(x-2, 0, x-2, height);
-        //                 g.drawLine(x-1, 0, x-1, height);
-        //                 g.drawLine(x+1, 0, x+1, height);
-        //                 g.drawLine(x+2, 0, x+2, height);
-        //             }
-        //         }
-
-        //         // Draw horizontal lines
-        //         for (int i = 0; i <= rows; i++) {
-        //             int y = i * cellHeight;
-        //             g.drawLine(0, y, width, y);
-
-        //             if (i % 3 == 0) {
-        //                 g.drawLine(0, y-2, width, y-2);
-        //                 g.drawLine(0, y-1, width, y-1);
-        //                 g.drawLine(0, y+1, width, y+1);
-        //                 g.drawLine(0, y+2, width, y+2);
-        //             }
-        //         }
-        //     }
-        // };
-
-        // add(panel);
-        // setVisible(true);
-
-        JPanel panel = new JPanel(new GridLayout(9, 9, 1, 1));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add some padding
-
-        // Add buttons to the grid
-        for (int i = 0; i < 81; i++) {
-            JButton button = new JButton();
-            button.setPreferredSize(new Dimension(50, 50)); // Set preferred size for buttons
-            panel.add(button);
-        }
-
-        add(panel);
         setVisible(true);
+    }
+
+    private class ButtonClickListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+
+            JButton buttonClicked = (JButton) e.getSource();
+            if (buttonClicked.getText().equals(" ")) {
+
+                if (Main.playerTurn == 'x') {
+                    Main.playerTurn = 'o';
+                    buttonClicked.setText("x");
+                } else {
+                    Main.playerTurn = 'x';
+                    buttonClicked.setText("o");
+                }
+            }
+        }
+    }
+
+    private class ButtonClickListener2 implements ActionListener {
+        int boardRow, boardCol, cellRow, cellCol;
+
+        public ButtonClickListener2(int boardRow, int boardCol, int cellRow, int cellCol) {
+            this.boardRow = boardRow;
+            this.boardCol = boardCol;
+            this.cellRow = cellRow;
+            this.cellCol = cellCol;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            try {
+                if (Main.bigBoard[boardRow][boardCol].board[cellRow][cellCol] == ' ') {
+                    Main.bigBoard[boardRow][boardCol].board[cellRow][cellCol] = Main.playerTurn;
+                    // buttons[boardRow * 3 + cellRow][boardCol * 3 + cellCol].setText(String.valueOf(Main.playerTurn));
+
+                    if (Main.playerTurn == 'x') {
+                        Main.playerTurn = 'o';
+                    } else {
+                        Main.playerTurn = 'x';
+                    }
+
+                    Main.turnOver(cellRow, cellCol);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

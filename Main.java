@@ -10,10 +10,14 @@ public class Main {
     public static Scanner in;
 
     public static void main(String[] args) throws Exception {
+        // console version: 
         printBoard();
         in = new Scanner(System.in);
         chooseBoard();
         in.close();
+
+        // app version:
+        // new TicTacToe();
     }
 
     public static void printBoard() {
@@ -70,7 +74,6 @@ public class Main {
         activeBoardCoor2 = coor2;
         bigBoard[coor1][coor2].board[coor3][coor4] = playerTurn;
         
-
         turnOver(coor3, coor4);
     }
 
@@ -109,10 +112,17 @@ public class Main {
     }
 
     public static void turnOver(int coor1, int coor2) throws Exception {
+        System.out.println("");
         printBoard();
 
         if (bigBoard[activeBoardCoor1][activeBoardCoor2].checkWin()) {
             System.out.println("Congrats Player " + playerTurn + "! You have won board (" + activeBoardCoor1 + ", " + activeBoardCoor2 + ").");
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    bigBoard[activeBoardCoor1][activeBoardCoor2].board[i][j] = playerTurn;
+                }
+            }
+            
             if (checkBigWin()) {
                 System.out.println("Congrats Player " + playerTurn + "! You have won the game.");
                 return;
